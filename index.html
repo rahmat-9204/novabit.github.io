@@ -4,6 +4,20 @@
   <meta charset="UTF-8">
   <title>NovaBit Exchange</title>
   <link rel="stylesheet" href="style.css">
+  <style>
+    body { font-family: Arial; margin:0; padding:0; background:#111; color:#fff; }
+    header { display:flex; justify-content:space-between; padding:10px 20px; background:#222; align-items:center; }
+    header h1 { margin:0; color:#00ffa3; }
+    .lang button { margin-right:5px; cursor:pointer; }
+    .main { padding:20px; text-align:center; }
+    .cards { display:flex; justify-content:center; gap:20px; margin:20px 0; }
+    .card { background:#222; padding:20px; border-radius:10px; min-width:100px; font-size:20px; }
+    table { width:80%; margin:20px auto; border-collapse:collapse; background:#222; color:#fff; }
+    table th, table td { border:1px solid #00ffa3; padding:10px; }
+    button { background:#00ffa3; color:#111; border:none; padding:5px 10px; cursor:pointer; border-radius:5px; }
+    .chart-container { width: 90%; max-width: 700px; margin: auto; }
+    footer { text-align:center; padding:10px; background:#222; margin-top:20px; color:#00ffa3; }
+  </style>
 </head>
 <body>
 
@@ -12,7 +26,7 @@
   <div class="lang">
     <button onclick="setLang('fa')">FA</button>
     <button onclick="setLang('en')">EN</button>
-    <a href="login.html" style="color:#00ffa3;text-decoration:none">
+    <a href="login.html" style="color:#00ffa3;text-decoration:none; margin-left:10px;">
       ورود / ثبت‌نام
     </a>
   </div>
@@ -40,7 +54,7 @@
   <!-- جدول موجودی کیف پول -->
   <div class="wallet">
     <h3>موجودی کیف پول</h3>
-    <table border="1" cellpadding="5">
+    <table>
       <thead>
         <tr>
           <th>ارز</th>
@@ -67,14 +81,11 @@
       </tbody>
     </table>
   </div>
-<div class="chart-container" style="width: 100%; max-width: 600px; margin: auto;">
-  <h3>نمودار قیمت BTC/ETH/USDT</h3>
-  <canvas id="cryptoChart"></canvas>
-</div>
+
   <!-- جدول معاملات کاربر -->
   <div class="trades">
     <h3>آخرین معاملات</h3>
-    <table border="1" cellpadding="5">
+    <table>
       <thead>
         <tr>
           <th>جفت ارز</th>
@@ -99,11 +110,21 @@
       </tbody>
     </table>
   </div>
+
+  <!-- نمودار قیمت -->
+  <div class="chart-container">
+    <h3>نمودار قیمت BTC/ETH/USDT</h3>
+    <canvas id="cryptoChart"></canvas>
+  </div>
+
 </div>
 
 <footer>
   © 2025 NovaBit Exchange
 </footer>
+
+<!-- کتابخانه Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <script>
   // ---------- تغییر زبان ----------
@@ -148,76 +169,57 @@
 
   loadPrices();
   setInterval(loadPrices, 30000); // هر ۳۰ ثانیه آپدیت
-</script>
-   const ctx = document.getElementById('cryptoChart').getContext('2d');
 
-let cryptoChart = new Chart(ctx, {
-  type: 'line',
-  data: {
-    labels: [], // زمان یا شماره آپدیت
-    datasets: [
-      {
-        label: 'BTC',
-        data: [],
-        borderColor: 'orange',
-        fill: false
-      },
-      {
-        label: 'ETH',
-        data: [],
-        borderColor: 'blue',
-        fill: false
-      },
-      {
-        label: 'USDT',
-        data: [],
-        borderColor: 'green',
-        fill: false
+  // ---------- نمودار زنده ----------
+  const ctx = document.getElementById('cryptoChart').getContext('2d');
+
+  let cryptoChart = new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: [],
+      datasets: [
+        { label: 'BTC', data: [], borderColor: 'orange', fill: false },
+        { label: 'ETH', data: [], borderColor: 'blue', fill: false },
+        { label: 'USDT', data: [], borderColor: 'green', fill: false }
+      ]
+    },
+    options: {
+      responsive: true,
+      animation: false,
+      scales: {
+        x: { title: { display: true, text: 'زمان' } },
+        y: { title: { display: true, text: 'قیمت (USD)' } }
       }
-    ]
-  },
-  options: {
-    responsive: true,
-    animation: false,
-    scales: {
-      x: { title: { display: true, text: 'زمان' } },
-      y: { title: { display: true, text: 'قیمت (USD)' } }
+    }
+  });
+
+  async function updateChart() {
+    try {
+      const res = await fetch(
+        "https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,tether&vs_currencies=usd"
+      );
+      const data = await res.json();
+      const time = new Date().toLocaleTimeString();
+
+      cryptoChart.data.labels.push(time);
+      cryptoChart.data.datasets[0].data.push(data.bitcoin.usd);
+      cryptoChart.data.datasets[1].data.push(data.ethereum.usd);
+      cryptoChart.data.datasets[2].data.push(data.tether.usd);
+
+      if (cryptoChart.data.labels.length > 20) {
+        cryptoChart.data.labels.shift();
+        cryptoChart.data.datasets.forEach(ds => ds.data.shift());
+      }
+
+      cryptoChart.update();
+    } catch (err) {
+      console.error("Error updating chart:", err);
     }
   }
-});
 
-// آپدیت کردن نمودار هر بار که قیمت‌ها تغییر می‌کنند
-async function updateChart() {
-  try {
-    const res = await fetch(
-      "https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,tether&vs_currencies=usd"
-    );
-    const data = await res.json();
+  setInterval(updateChart, 30000);
+  updateChart();
+</script>
 
-    const time = new Date().toLocaleTimeString();
-
-    // اضافه کردن داده‌ها
-    cryptoChart.data.labels.push(time);
-    cryptoChart.data.datasets[0].data.push(data.bitcoin.usd);
-    cryptoChart.data.datasets[1].data.push(data.ethereum.usd);
-    cryptoChart.data.datasets[2].data.push(data.tether.usd);
-
-    // محدود کردن آخرین 20 نقطه برای تمیز بودن نمودار
-    if (cryptoChart.data.labels.length > 20) {
-      cryptoChart.data.labels.shift();
-      cryptoChart.data.datasets.forEach(ds => ds.data.shift());
-    }
-
-    cryptoChart.update();
-  } catch (err) {
-    console.error("Error updating chart:", err);
-  }
-}
-
-// آپدیت هر ۳۰ ثانیه
-setInterval(updateChart, 30000);
-updateChart(); // اجرای اولیه
-<!-- Chart.js -->
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </body>
 </html>
