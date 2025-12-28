@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+  <meta charset="UTF-8">
+  <title>NovaBit Exchange</title>
+</head>
+<body style="background:#0b0f1a;color:white;text-align:center;font-family:sans-serif">
+
+  <h1 id="title">صرافی نوابیت</h1>
+
+  <button onclick="setLang('fa')">FA</button>
+  <button onclick="setLang('en')">EN</button>
+
+  <h2 id="welcome">به صرافی ارز دیجیتال نوابیت خوش آمدید</h2>
+
+  <p id="desc">
+    خرید و فروش امن ارزهای دیجیتال با بهترین قیمت
+  </p>
+
+  <h3 id="prices">قیمت‌ها</h3>
+  <ul>
+    <li>Bitcoin (BTC): $43,000</li>
+    <li>Ethereum (ETH): $2,300</li>
+    <li>Tether (USDT): $1</li>
+  </ul>
+
+  <script>
+    function setLang(lang) {
+      if (lang === 'fa') {
+        document.documentElement.lang = 'fa';
+        title.innerText = 'صرافی نوابیت';
+        welcome.innerText = 'به صرافی ارز دیجیتال نوابیت خوش آمدید';
+        desc.innerText = 'خرید و فروش امن ارزهای دیجیتال با بهترین قیمت';
+        prices.innerText = 'قیمت‌ها';
+      } else {
+        document.documentElement.lang = 'en';
+        title.innerText = 'NovaBit Exchange';
+        welcome.innerText = 'Welcome to NovaBit Crypto Exchange';
+        desc.innerText = 'Secure trading of cryptocurrencies at the best prices';
+        prices.innerText = 'Prices';
+      }
+    }
+  </script>
+
+</body>
+</html>
