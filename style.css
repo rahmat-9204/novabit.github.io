@@ -1,57 +1,114 @@
-body {
+/* ---------- Reset و تنظیمات پایه ---------- */
+* {
   margin: 0;
-  font-family: Arial, sans-serif;
-  background: #0b0f1a;
-  color: #ffffff;
-  direction: rtl;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
+body {
+  background-color: #0a0a0a;
+  color: #ffffff;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ---------- هدر ---------- */
 header {
-  background: #11162a;
-  padding: 20px;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  padding: 20px 40px;
+  background-color: #111111;
+  border-bottom: 2px solid #00ffa3;
 }
 
 header h1 {
-  margin: 0;
-  color: #00ffa3;
+  font-size: 1.8rem;
 }
 
 .lang button {
-  margin-left: 5px;
-  padding: 6px 10px;
-  background: #1e2445;
-  color: white;
+  background-color: #00ffa3;
   border: none;
+  color: #0a0a0a;
+  padding: 5px 10px;
+  margin-right: 10px;
   cursor: pointer;
   border-radius: 4px;
+  font-weight: bold;
 }
 
+.lang button:hover {
+  background-color: #00cc82;
+}
+
+/* ---------- بخش اصلی ---------- */
 .main {
-  padding: 40px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 40px 20px;
   text-align: center;
 }
 
+.main h2 {
+  margin-bottom: 10px;
+  font-size: 1.5rem;
+}
+
+.main p {
+  margin-bottom: 30px;
+  color: #aaaaaa;
+}
+
+/* ---------- کارت‌ها ---------- */
 .cards {
   display: flex;
-  justify-content: center;
   gap: 20px;
   flex-wrap: wrap;
+  justify-content: center;
 }
 
 .card {
-  background: #161b33;
-  padding: 20px;
-  width: 200px;
+  background-color: #1a1a1a;
+  padding: 20px 40px;
   border-radius: 10px;
+  border: 2px solid #00ffa3;
+  min-width: 120px;
+  text-align: center;
+  font-size: 1.2rem;
+  transition: transform 0.2s, box-shadow 0.2s;
 }
 
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 0 15px #00ffa3;
+}
+
+/* ---------- فوتر ---------- */
 footer {
-  background: #11162a;
-  padding: 15px;
   text-align: center;
-  margin-top: 40px;
-  color: #aaa;
+  padding: 15px;
+  background-color: #111111;
+  border-top: 2px solid #00ffa3;
+  color: #aaaaaa;
+}
+
+/* ---------- واکنش‌گرایی موبایل ---------- */
+@media (max-width: 600px) {
+  .cards {
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .lang {
+    margin-top: 10px;
+  }
 }
