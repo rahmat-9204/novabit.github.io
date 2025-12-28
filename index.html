@@ -67,7 +67,10 @@
       </tbody>
     </table>
   </div>
-
+<div class="chart-container" style="width: 100%; max-width: 600px; margin: auto;">
+  <h3>نمودار قیمت BTC/ETH/USDT</h3>
+  <canvas id="cryptoChart"></canvas>
+</div>
   <!-- جدول معاملات کاربر -->
   <div class="trades">
     <h3>آخرین معاملات</h3>
@@ -146,6 +149,75 @@
   loadPrices();
   setInterval(loadPrices, 30000); // هر ۳۰ ثانیه آپدیت
 </script>
+   const ctx = document.getElementById('cryptoChart').getContext('2d');
 
+let cryptoChart = new Chart(ctx, {
+  type: 'line',
+  data: {
+    labels: [], // زمان یا شماره آپدیت
+    datasets: [
+      {
+        label: 'BTC',
+        data: [],
+        borderColor: 'orange',
+        fill: false
+      },
+      {
+        label: 'ETH',
+        data: [],
+        borderColor: 'blue',
+        fill: false
+      },
+      {
+        label: 'USDT',
+        data: [],
+        borderColor: 'green',
+        fill: false
+      }
+    ]
+  },
+  options: {
+    responsive: true,
+    animation: false,
+    scales: {
+      x: { title: { display: true, text: 'زمان' } },
+      y: { title: { display: true, text: 'قیمت (USD)' } }
+    }
+  }
+});
+
+// آپدیت کردن نمودار هر بار که قیمت‌ها تغییر می‌کنند
+async function updateChart() {
+  try {
+    const res = await fetch(
+      "https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,tether&vs_currencies=usd"
+    );
+    const data = await res.json();
+
+    const time = new Date().toLocaleTimeString();
+
+    // اضافه کردن داده‌ها
+    cryptoChart.data.labels.push(time);
+    cryptoChart.data.datasets[0].data.push(data.bitcoin.usd);
+    cryptoChart.data.datasets[1].data.push(data.ethereum.usd);
+    cryptoChart.data.datasets[2].data.push(data.tether.usd);
+
+    // محدود کردن آخرین 20 نقطه برای تمیز بودن نمودار
+    if (cryptoChart.data.labels.length > 20) {
+      cryptoChart.data.labels.shift();
+      cryptoChart.data.datasets.forEach(ds => ds.data.shift());
+    }
+
+    cryptoChart.update();
+  } catch (err) {
+    console.error("Error updating chart:", err);
+  }
+}
+
+// آپدیت هر ۳۰ ثانیه
+setInterval(updateChart, 30000);
+updateChart(); // اجرای اولیه
+<!-- Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </body>
 </html>
