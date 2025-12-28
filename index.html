@@ -23,9 +23,18 @@
   <p id="desc">خرید و فروش امن ارزهای دیجیتال با بهترین قیمت</p>
 
   <div class="cards">
-    <div class="card">BTC<br>$43,000</div>
-    <div class="card">ETH<br>$2,300</div>
-    <div class="card">USDT<br>$1</div>
+    <div class="cards">
+  <div class="card">
+    BTC<br>
+    <span id="btc">Loading...</span>
+  </div>
+  <div class="card">
+    ETH<br>
+    <span id="eth">Loading...</span>
+  </div>
+  <div class="card">
+    USDT<br>
+    <span id="usdt">Loading...</span>
   </div>
 </div>
 
@@ -50,6 +59,20 @@ function setLang(lang) {
   }
 }
 </script>
+<script>
+async function loadPrices() {
+  const res = await fetch(
+    "https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,tether&vs_currencies=usd"
+  );
+  const data = await res.json();
 
+  document.getElementById("btc").innerText = "$" + data.bitcoin.usd;
+  document.getElementById("eth").innerText = "$" + data.ethereum.usd;
+  document.getElementById("usdt").innerText = "$" + data.tether.usd;
+}
+
+loadPrices();
+setInterval(loadPrices, 30000); // هر ۳۰ ثانیه آپدیت
+</script>
 </body>
 </html>
