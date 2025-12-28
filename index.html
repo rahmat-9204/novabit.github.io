@@ -3,44 +3,50 @@
 <head>
   <meta charset="UTF-8">
   <title>NovaBit Exchange</title>
+  <link rel="stylesheet" href="style.css">
 </head>
-<body style="background:#0b0f1a;color:white;text-align:center;font-family:sans-serif">
+<body>
 
+<header>
   <h1 id="title">صرافی نوابیت</h1>
+  <div class="lang">
+    <button onclick="setLang('fa')">FA</button>
+    <button onclick="setLang('en')">EN</button>
+  </div>
+</header>
 
-  <button onclick="setLang('fa')">FA</button>
-  <button onclick="setLang('en')">EN</button>
-
+<div class="main">
   <h2 id="welcome">به صرافی ارز دیجیتال نوابیت خوش آمدید</h2>
+  <p id="desc">خرید و فروش امن ارزهای دیجیتال با بهترین قیمت</p>
 
-  <p id="desc">
-    خرید و فروش امن ارزهای دیجیتال با بهترین قیمت
-  </p>
+  <div class="cards">
+    <div class="card">BTC<br>$43,000</div>
+    <div class="card">ETH<br>$2,300</div>
+    <div class="card">USDT<br>$1</div>
+  </div>
+</div>
 
-  <h3 id="prices">قیمت‌ها</h3>
-  <ul>
-    <li>Bitcoin (BTC): $43,000</li>
-    <li>Ethereum (ETH): $2,300</li>
-    <li>Tether (USDT): $1</li>
-  </ul>
+<footer>
+  © 2025 NovaBit Exchange
+</footer>
 
-  <script>
-    function setLang(lang) {
-      if (lang === 'fa') {
-        document.documentElement.lang = 'fa';
-        title.innerText = 'صرافی نوابیت';
-        welcome.innerText = 'به صرافی ارز دیجیتال نوابیت خوش آمدید';
-        desc.innerText = 'خرید و فروش امن ارزهای دیجیتال با بهترین قیمت';
-        prices.innerText = 'قیمت‌ها';
-      } else {
-        document.documentElement.lang = 'en';
-        title.innerText = 'NovaBit Exchange';
-        welcome.innerText = 'Welcome to NovaBit Crypto Exchange';
-        desc.innerText = 'Secure trading of cryptocurrencies at the best prices';
-        prices.innerText = 'Prices';
-      }
-    }
-  </script>
+<script>
+function setLang(lang) {
+  if (lang === 'fa') {
+    document.documentElement.lang = 'fa';
+    document.body.style.direction = 'rtl';
+    title.innerText = 'صرافی نوابیت';
+    welcome.innerText = 'به صرافی ارز دیجیتال نوابیت خوش آمدید';
+    desc.innerText = 'خرید و فروش امن ارزهای دیجیتال با بهترین قیمت';
+  } else {
+    document.documentElement.lang = 'en';
+    document.body.style.direction = 'ltr';
+    title.innerText = 'NovaBit Exchange';
+    welcome.innerText = 'Welcome to NovaBit Crypto Exchange';
+    desc.innerText = 'Secure trading of cryptocurrencies at the best prices';
+  }
+}
+</script>
 
 </body>
 </html>
