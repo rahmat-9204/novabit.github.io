@@ -13,8 +13,8 @@
     <button onclick="setLang('fa')">FA</button>
     <button onclick="setLang('en')">EN</button>
     <a href="login.html" style="color:#00ffa3;text-decoration:none">
-  ورود / ثبت‌نام
-</a>
+      ورود / ثبت‌نام
+    </a>
   </div>
 </header>
 
@@ -23,18 +23,18 @@
   <p id="desc">خرید و فروش امن ارزهای دیجیتال با بهترین قیمت</p>
 
   <div class="cards">
-    <div class="cards">
-  <div class="card">
-    BTC<br>
-    <span id="btc">Loading...</span>
-  </div>
-  <div class="card">
-    ETH<br>
-    <span id="eth">Loading...</span>
-  </div>
-  <div class="card">
-    USDT<br>
-    <span id="usdt">Loading...</span>
+    <div class="card">
+      BTC<br>
+      <span id="btc">Loading...</span>
+    </div>
+    <div class="card">
+      ETH<br>
+      <span id="eth">Loading...</span>
+    </div>
+    <div class="card">
+      USDT<br>
+      <span id="usdt">Loading...</span>
+    </div>
   </div>
 </div>
 
@@ -43,36 +43,49 @@
 </footer>
 
 <script>
-function setLang(lang) {
-  if (lang === 'fa') {
-    document.documentElement.lang = 'fa';
-    document.body.style.direction = 'rtl';
-    title.innerText = 'صرافی نوابیت';
-    welcome.innerText = 'به صرافی ارز دیجیتال نوابیت خوش آمدید';
-    desc.innerText = 'خرید و فروش امن ارزهای دیجیتال با بهترین قیمت';
-  } else {
-    document.documentElement.lang = 'en';
-    document.body.style.direction = 'ltr';
-    title.innerText = 'NovaBit Exchange';
-    welcome.innerText = 'Welcome to NovaBit Crypto Exchange';
-    desc.innerText = 'Secure trading of cryptocurrencies at the best prices';
+  // ---------- تغییر زبان ----------
+  function setLang(lang) {
+    const titleEl = document.getElementById('title');
+    const welcomeEl = document.getElementById('welcome');
+    const descEl = document.getElementById('desc');
+
+    if (lang === 'fa') {
+      document.documentElement.lang = 'fa';
+      document.body.style.direction = 'rtl';
+      titleEl.innerText = 'صرافی نوابیت';
+      welcomeEl.innerText = 'به صرافی ارز دیجیتال نوابیت خوش آمدید';
+      descEl.innerText = 'خرید و فروش امن ارزهای دیجیتال با بهترین قیمت';
+    } else {
+      document.documentElement.lang = 'en';
+      document.body.style.direction = 'ltr';
+      titleEl.innerText = 'NovaBit Exchange';
+      welcomeEl.innerText = 'Welcome to NovaBit Crypto Exchange';
+      descEl.innerText = 'Secure trading of cryptocurrencies at the best prices';
+    }
   }
-}
-</script>
-<script>
-async function loadPrices() {
-  const res = await fetch(
-    "https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,tether&vs_currencies=usd"
-  );
-  const data = await res.json();
 
-  document.getElementById("btc").innerText = "$" + data.bitcoin.usd;
-  document.getElementById("eth").innerText = "$" + data.ethereum.usd;
-  document.getElementById("usdt").innerText = "$" + data.tether.usd;
-}
+  // ---------- دریافت قیمت ارز دیجیتال ----------
+  async function loadPrices() {
+    try {
+      const res = await fetch(
+        "https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,tether&vs_currencies=usd"
+      );
+      const data = await res.json();
 
-loadPrices();
-setInterval(loadPrices, 30000); // هر ۳۰ ثانیه آپدیت
+      document.getElementById("btc").innerText = "$" + data.bitcoin.usd;
+      document.getElementById("eth").innerText = "$" + data.ethereum.usd;
+      document.getElementById("usdt").innerText = "$" + data.tether.usd;
+    } catch (err) {
+      console.error("Error loading prices:", err);
+      document.getElementById("btc").innerText = "Error";
+      document.getElementById("eth").innerText = "Error";
+      document.getElementById("usdt").innerText = "Error";
+    }
+  }
+
+  loadPrices();
+  setInterval(loadPrices, 30000); // هر ۳۰ ثانیه آپدیت
 </script>
+
 </body>
 </html>
